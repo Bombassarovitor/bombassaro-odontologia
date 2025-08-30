@@ -82,18 +82,6 @@
             }
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
         @keyframes shimmer {
             0% {
                 background-position: -200px 0;
@@ -105,10 +93,44 @@
 
         @keyframes glow {
             0%, 100% {
-                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+                box-shadow: 0 8px 40px rgba(13, 110, 253, 0.1);
             }
             50% {
-                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+                box-shadow: 0 20px 60px rgba(13, 110, 253, 0.2);
+            }
+        }
+
+        @keyframes modalSlideIn {
+            from { 
+                transform: translateY(-60px) scale(0.9); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOutRight {
+            to {
+                opacity: 0;
+                transform: translateX(100px);
             }
         }
 
@@ -206,19 +228,19 @@
         }
 
         .dentist-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 80px rgba(13, 110, 253, 0.15);
             border-color: #e0e0e0;
             animation: glow 2s ease-in-out infinite;
         }
 
         .dentist-photo {
             height: 320px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c757d;
+            color: #0d6efd;
             font-size: 1.1rem;
             font-weight: 300;
             position: relative;
@@ -232,7 +254,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background: rgba(108, 117, 125, 0.1);
+            background: rgba(13, 110, 253, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -242,13 +264,13 @@
         .dentist-photo::after {
             content: '📷';
             font-size: 2.5rem;
-            opacity: 0.3;
+            opacity: 0.6;
             z-index: 1;
             animation: pulse 2s ease-in-out infinite;
         }
 
         .dentist-card:hover .dentist-photo {
-            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
         }
 
         .dentist-info {
@@ -266,7 +288,7 @@
         }
 
         .dentist-card:hover .dentist-name {
-            color: #333;
+            color: #0d6efd;
         }
 
         .dentist-instagram {
@@ -298,7 +320,6 @@
 
         .dentist-instagram:hover::before {
             width: 100%;
-            background: #0d6efd;
         }
 
         .dentist-description {
@@ -316,8 +337,9 @@
         }
 
         .dentist-card:hover .dentist-description {
-            background: #f0f0f0;
+            background: #e3f2fd;
             transform: translateY(-2px);
+            border-color: rgba(13, 110, 253, 0.2);
         }
 
         .schedule-btn {
@@ -402,28 +424,28 @@
         }
 
         .portfolio-item:hover {
-            transform: translateY(-12px) rotate(2deg);
-            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 80px rgba(13, 110, 253, 0.12);
         }
 
         .portfolio-placeholder {
             height: 220px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             border-radius: 16px;
             margin-bottom: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #6c757d;
+            color: #0d6efd;
             font-size: 3rem;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(13, 110, 253, 0.1);
             transition: all 0.3s ease;
             animation: float 4s ease-in-out infinite;
         }
 
         .portfolio-item:hover .portfolio-placeholder {
-            transform: scale(1.1);
-            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
         }
 
         .portfolio-item h4 {
@@ -435,7 +457,7 @@
         }
 
         .portfolio-item:hover h4 {
-            color: #333;
+            color: #0d6efd;
         }
 
         .portfolio-item p {
@@ -463,11 +485,6 @@
             padding: 20px 0;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .modal-content {
             background: white;
             margin: 2rem auto;
@@ -479,20 +496,8 @@
             position: relative;
             animation: modalSlideIn 0.5s cubic-bezier(0.23, 1, 0.320, 1);
             min-height: auto;
-            max-height: calc(100vh - 4rem);
-            overflow-y: auto;
+            max-height: none;
             border: 2px solid rgba(13, 110, 253, 0.1);
-        }
-
-        @keyframes modalSlideIn {
-            from { 
-                transform: translateY(-60px) scale(0.9); 
-                opacity: 0; 
-            }
-            to { 
-                transform: translateY(0) scale(1); 
-                opacity: 1; 
-            }
         }
 
         .close {
@@ -562,7 +567,7 @@
             outline: none;
             border-color: #0d6efd;
             background: white;
-            transform: translateY(-2px) scale(1.02);
+            transform: translateY(-2px);
             box-shadow: 0 12px 30px rgba(13, 110, 253, 0.15);
         }
 
@@ -582,6 +587,7 @@
             overflow: hidden;
             animation: fadeInUp 0.4s ease-out 0.8s both;
             box-shadow: 0 8px 25px rgba(13, 110, 253, 0.2);
+            margin-top: 1rem;
         }
 
         .submit-btn::before {
@@ -631,26 +637,26 @@
         }
 
         .appointment-item {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e3f2fd 100%);
             padding: 1.5rem;
             border-radius: 16px;
             margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #f0f0f0;
+            border: 1px solid rgba(13, 110, 253, 0.1);
             transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
             animation: fadeInRight 0.5s ease-out;
         }
 
         .appointment-item:hover {
-            background: #e9ecef;
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
             transform: translateX(10px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.1);
         }
 
         .delete-btn {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
             color: white;
             border: none;
             padding: 8px 20px;
@@ -675,7 +681,7 @@
         }
 
         .delete-btn:hover {
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            background: linear-gradient(135deg, #c82333 0%, #e67e00 100%);
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
         }
@@ -706,28 +712,9 @@
 
         .footer p {
             font-size: 1.1rem;
-            opacity: 0.8;
+            opacity: 0.9;
             font-weight: 300;
             line-height: 1.8;
-        }
-
-        /* Animação de entrada para elementos visíveis */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-        }
-
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Efeito shimmer para loading */
-        .shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200px 100%;
-            animation: shimmer 1.5s infinite;
         }
 
         /* Notificação de sucesso/erro */
@@ -744,19 +731,8 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
-        @keyframes slideInFromRight {
-            from {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
         .notification.success {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, #20c997 0%, #0d6efd 100%);
         }
 
         .notification.error {
@@ -767,89 +743,53 @@
             animation: fadeOutRight 0.5s ease-out forwards;
         }
 
-        @keyframes fadeOutRight {
-            to {
-                opacity: 0;
-                transform: translateX(100px);
-            }
-        }
-
-        /* Efeito de typing para o texto do header */
-        .typing-text {
-            overflow: hidden;
-            border-right: 3px solid rgba(255, 255, 255, 0.75);
-            white-space: nowrap;
-            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
-        }
-
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-
-        @keyframes blink-caret {
-            from, to { border-color: transparent; }
-            50% { border-color: rgba(255, 255, 255, 0.75); }
-        }
-
-        /* Melhorias responsivas */
-            @media (max-width: 768px) {
-                .header h1 {
-                    font-size: 3rem;
-                    letter-spacing: -2px;
-                }
-                
-                .header p {
-                    font-size: 1.2rem;
-                }
-                
-                .dentists-grid {
-                    grid-template-columns: 1fr;
-                    gap: 2.5rem;
-                }
-                
-                .modal {
-                    padding: 10px 0;
-                }
-                
-                .modal-content {
-                    width: 95%;
-                    margin: 1rem auto;
-                    padding: 2rem;
-                    max-height: calc(100vh - 2rem);
-                }
-
-                .section {
-                    padding: 5rem 0;
-                }
-
-                .section-title {
-                    font-size: 2.5rem;
-                }
-
-                .dentist-card:hover {
-                    transform: translateY(-8px) scale(1.01);
-                }
-
-                .portfolio-item:hover {
-                    transform: translateY(-8px) rotate(1deg);
-                }
-            }
-
         /* Estados de loading melhorados */
-        .loading {
-            position: relative;
+        .shimmer {
+            background: linear-gradient(90deg, rgba(13, 110, 253, 0.1) 25%, rgba(13, 110, 253, 0.3) 50%, rgba(13, 110, 253, 0.1) 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
         }
 
-        .loading::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
-            animation: shimmer 1.5s infinite;
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3rem;
+                letter-spacing: -2px;
+            }
+            
+            .header p {
+                font-size: 1.2rem;
+            }
+            
+            .dentists-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            
+            .modal {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 1rem auto;
+                padding: 2rem;
+            }
+
+            .section {
+                padding: 5rem 0;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .dentist-card:hover {
+                transform: translateY(-8px);
+            }
+
+            .portfolio-item:hover {
+                transform: translateY(-8px);
+            }
         }
     </style>
 </head>
@@ -863,9 +803,9 @@
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title animate-on-scroll">Nossos Dentistas</h2>
+            <h2 class="section-title">Nossos Dentistas</h2>
             <div class="dentists-grid">
-                <div class="dentist-card animate-on-scroll">
+                <div class="dentist-card">
                     <div class="dentist-photo">
                         <span>Foto do Dr. Márcio</span>
                     </div>
@@ -881,7 +821,7 @@
                     </div>
                 </div>
 
-                <div class="dentist-card animate-on-scroll">
+                <div class="dentist-card">
                     <div class="dentist-photo">
                         <span>Foto da Dra. Consuelo</span>
                     </div>
@@ -897,8 +837,288 @@
                     </div>
                 </div>
 
-                <div class="dentist-card animate-on-scroll">
+                <div class="dentist-card">
                     <div class="dentist-photo">
                         <span>Foto do Dr. Fernando</span>
                     </div>
-                    <div class="dentist-
+                    <div class="dentist-info">
+                        <h3 class="dentist-name">Dr. Fernando Bombassaro</h3>
+                        <a href="https://www.instagram.com/bombassaro_fernando/" class="dentist-instagram" target="_blank">@bombassaro_fernando</a>
+                        <div class="dentist-description">
+                            [Espaço para descrição do Dr. Fernando - adicione manualmente]
+                        </div>
+                        <button class="schedule-btn" onclick="openModal('Fernando Bombassaro')">
+                            Agendar Consulta
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="appointments">
+                <h3>Agendamentos Realizados</h3>
+                <div id="appointmentsList"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section portfolio-section">
+        <div class="container">
+            <h2 class="section-title">Nossos Trabalhos</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder">🦷</div>
+                    <h4>Dr. Márcio Edu Bombassaro</h4>
+                    <p>Trabalhos realizados</p>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder">✨</div>
+                    <h4>Dra. Consuelo Bombassaro</h4>
+                    <p>Trabalhos realizados</p>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder">😁</div>
+                    <h4>Dr. Fernando Bombassaro</h4>
+                    <p>Trabalhos realizados</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3>Localização</h3>
+                <p>R. Bento Gonçalves, 910 - Centro<br>Itaqui - RS, 97650-000</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Agendamento -->
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Agendar Consulta</h2>
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label for="patientName">Nome do Paciente:</label>
+                    <input type="text" id="patientName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="patientPhone">Telefone:</label>
+                    <input type="tel" id="patientPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="patientEmail">Email:</label>
+                    <input type="email" id="patientEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentDate">Data:</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentTime">Horário:</label>
+                    <input type="time" id="appointmentTime" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentType">Tipo de Consulta:</label>
+                    <select id="appointmentType" required>
+                        <option value="">Selecione...</option>
+                        <option value="consulta">Consulta</option>
+                        <option value="limpeza">Limpeza</option>
+                        <option value="canal">Tratamento de Canal</option>
+                        <option value="ortodontia">Ortodontia</option>
+                        <option value="implante">Implante</option>
+                        <option value="emergencia">Emergência</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="observations">Observações:</label>
+                    <textarea id="observations" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Confirmar Agendamento</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let appointments = [];
+        let currentDentist = '';
+
+        function openModal(dentistName) {
+            currentDentist = dentistName;
+            document.getElementById('modalTitle').textContent = `Agendar Consulta - Dr(a). ${dentistName}`;
+            document.getElementById('scheduleModal').style.display = 'block';
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').min = today;
+            
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('scheduleModal').style.display = 'none';
+            document.getElementById('scheduleForm').reset();
+            
+            // Restore body scroll
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('scheduleModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Função para mostrar notificações
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // SISTEMA DE AGENDAMENTO MELHORADO - Salva localmente
+        const GOOGLE_SCRIPT_URL = ''; // Adicione sua URL válida aqui se necessário
+
+        document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('shimmer');
+            
+            const appointment = {
+                id: Date.now(),
+                dentist: currentDentist,
+                patientName: document.getElementById('patientName').value,
+                patientPhone: document.getElementById('patientPhone').value,
+                patientEmail: document.getElementById('patientEmail').value,
+                date: document.getElementById('appointmentDate').value,
+                time: document.getElementById('appointmentTime').value,
+                type: document.getElementById('appointmentType').value,
+                observations: document.getElementById('observations').value
+            };
+
+            // Check for conflicts (local)
+            const conflictExists = appointments.some(apt => 
+                apt.dentist === appointment.dentist && 
+                apt.date === appointment.date && 
+                apt.time === appointment.time
+            );
+
+            if (conflictExists) {
+                showNotification('Este horário já está ocupado para este dentista. Por favor, escolha outro horário.', 'error');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('shimmer');
+                return;
+            }
+
+            try {
+                // Simula delay de envio para demonstração
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Salva localmente
+                appointments.push(appointment);
+                updateAppointmentsList();
+                closeModal();
+                showNotification('✅ Agendamento realizado com sucesso! Você receberá uma confirmação em breve.', 'success');
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                showNotification('❌ Erro ao realizar agendamento. Tente novamente ou entre em contato conosco.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('shimmer');
+            }
+        });
+
+        function updateAppointmentsList() {
+            const list = document.getElementById('appointmentsList');
+            if (appointments.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #6c757d; font-weight: 300; animation: fadeInUp 0.5s ease-out;">Nenhum agendamento realizado ainda.</p>';
+                return;
+            }
+
+            // Group appointments by dentist
+            const groupedAppointments = appointments.reduce((groups, appointment) => {
+                const dentist = appointment.dentist;
+                if (!groups[dentist]) {
+                    groups[dentist] = [];
+                }
+                groups[dentist].push(appointment);
+                return groups;
+            }, {});
+
+            let html = '';
+            
+            Object.keys(groupedAppointments).forEach(dentist => {
+                html += `<h4 style="color: #0d6efd; margin: 2rem 0 1.5rem 0; font-weight: 300; font-size: 1.3rem;">Dr(a). ${dentist}</h4>`;
+                
+                groupedAppointments[dentist]
+                    .sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time))
+                    .forEach(appointment => {
+                        const date = new Date(appointment.date).toLocaleDateString('pt-BR');
+                        html += `
+                            <div class="appointment-item">
+                                <div>
+                                    <strong style="font-weight: 400; color: #0d6efd;">${appointment.patientName}</strong><br>
+                                    📅 ${date} às ${appointment.time}<br>
+                                    📱 ${appointment.patientPhone}<br>
+                                    🦷 ${appointment.type}
+                                    ${appointment.observations ? `<br>📝 ${appointment.observations}` : ''}
+                                </div>
+                                <button class="delete-btn" onclick="deleteAppointment(${appointment.id})">
+                                    Excluir
+                                </button>
+                            </div>
+                        `;
+                    });
+            });
+            
+            list.innerHTML = html;
+        }
+
+        function deleteAppointment(id) {
+            if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+                appointments = appointments.filter(apt => apt.id !== id);
+                updateAppointmentsList();
+                showNotification('Agendamento excluído com sucesso.', 'success');
+            }
+        }
+
+        // Initialize
+        updateAppointmentsList();
+
+        // Escape key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
