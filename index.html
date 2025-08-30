@@ -777,6 +777,33 @@
             white-space: pre-wrap;
         }
 
+        .connection-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-left: 1rem;
+        }
+
+        .connection-status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .connection-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .connection-status.testing {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 3rem;
@@ -882,7 +909,9 @@
             </div>
 
             <div class="appointments">
-                <h3>Agendamentos Realizados</h3>
+                <h3>Agendamentos Realizados 
+                    <span id="connectionStatus" class="connection-status disconnected">Desconectado</span>
+                </h3>
                 <div id="appointmentsList"></div>
                 
                 <!-- Debug Section -->
@@ -891,6 +920,9 @@
                     <div id="debugLog" class="debug-log"></div>
                     <button onclick="testConnection()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #0d6efd; color: white; border: none; border-radius: 8px; cursor: pointer;">
                         Testar Conexão
+                    </button>
+                    <button onclick="clearDebugLog()" style="margin-top: 1rem; margin-left: 0.5rem; padding: 0.5rem 1rem; background: #6c757d; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        Limpar Log
                     </button>
                 </div>
             </div>
@@ -942,12 +974,12 @@
                 
                 <div class="form-group">
                     <label for="patientPhone">Telefone:</label>
-                    <input type="tel" id="patientPhone" required>
+                    <input type="tel" id="patientPhone" required placeholder="(51) 99999-9999">
                 </div>
                 
                 <div class="form-group">
                     <label for="patientEmail">Email:</label>
-                    <input type="email" id="patientEmail" required>
+                    <input type="email" id="patientEmail" placeholder="exemplo@email.com">
                 </div>
                 
                 <div class="form-group">
@@ -975,7 +1007,7 @@
                 
                 <div class="form-group">
                     <label for="observations">Observações:</label>
-                    <textarea id="observations" rows="3"></textarea>
+                    <textarea id="observations" rows="3" placeholder="Informações adicionais (opcional)"></textarea>
                 </div>
                 
                 <button type="submit" class="submit-btn">Confirmar Agendamento</button>
@@ -987,8 +1019,8 @@
         let appointments = [];
         let currentDentist = '';
         
-        // Configure your Google Apps Script URL here
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzLXgXyXyqAuyBdrwjLo3ZdQ3RfUuCUydw1rKuHYLGxo3QVzGzvILRs-YiM9OqJjTOH/exec';
+        // CONFIGURE SUA URL DO GOOGLE APPS SCRIPT AQUI
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzb-IKZIlG0Sl-5-S79zqpPEKMMIZbbPV4C-pYTImmBwtFndUMlrLkTPYrLpwlRYUs/exec';
 
         function debugLog(message) {
             const debugElement = document.getElementById('debugLog');
@@ -996,6 +1028,28 @@
             debugElement.textContent += `[${timestamp}] ${message}\n`;
             debugElement.scrollTop = debugElement.scrollHeight;
             console.log(message);
+        }
+
+        function clearDebugLog() {
+            document.getElementById('debugLog').textContent = '';
+        }
+
+        function updateConnectionStatus(status) {
+            const statusElement = document.getElementById('connectionStatus');
+            statusElement.className = `connection-status ${status}`;
+            
+            switch(status) {
+                case 'connected':
+                    statusElement.textContent = 'Conectado';
+                    break;
+                case 'testing':
+                    statusElement.textContent = 'Testando...';
+                    break;
+                case 'disconnected':
+                default:
+                    statusElement.textContent = 'Desconectado';
+                    break;
+            }
         }
 
         function openModal(dentistName) {
@@ -1044,32 +1098,54 @@
             }, 3000);
         }
 
-        // Test connection function
+        // FUNÇÃO DE TESTE DE CONEXÃO MELHORADA
         async function testConnection() {
+            updateConnectionStatus('testing');
             debugLog('Testando conexão com Google Apps Script...');
             
-            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'COLE_SUA_URL_AQUI') {
                 debugLog('ERRO: URL do Google Apps Script não configurada');
+                debugLog('1. Vá para script.google.com');
+                debugLog('2. Cole o código Apps Script corrigido');
+                debugLog('3. Implante como Web App');
+                debugLog('4. Copie a URL e cole na variável GOOGLE_SCRIPT_URL');
                 showNotification('Configure a URL do Google Apps Script primeiro', 'error');
+                updateConnectionStatus('disconnected');
                 return;
             }
 
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=test', {
-                    method: 'GET',
-                    mode: 'no-cors'  // Changed to no-cors for better compatibility
+                debugLog(`Enviando teste para: ${GOOGLE_SCRIPT_URL}`);
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=test&timestamp=' + Date.now(), {
+                    method: 'GET'
                 });
                 
-                debugLog(`Teste enviado. Note: no-cors mode não permite ler a resposta`);
-                showNotification('Teste enviado para Google Apps Script', 'success');
+                if (response.ok) {
+                    const result = await response.json();
+                    debugLog(`Resposta recebida: ${JSON.stringify(result)}`);
+                    
+                    if (result.status === 'success') {
+                        updateConnectionStatus('connected');
+                        showNotification('Conexão com Google Sheets funcionando!', 'success');
+                    } else {
+                        updateConnectionStatus('disconnected');
+                        showNotification('Erro na resposta do servidor', 'error');
+                    }
+                } else {
+                    debugLog(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                    updateConnectionStatus('disconnected');
+                    showNotification('Erro de conexão HTTP', 'error');
+                }
                 
             } catch (error) {
                 debugLog(`Erro de rede: ${error.message}`);
-                showNotification('Erro de conexão. Verifique a URL.', 'error');
+                updateConnectionStatus('disconnected');
+                showNotification('Erro de conexão. Verifique a URL e as permissões.', 'error');
             }
         }
 
-        // SISTEMA DE AGENDAMENTO MELHORADO
+        // SISTEMA DE AGENDAMENTO TOTALMENTE CORRIGIDO
         document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1079,91 +1155,117 @@
             submitBtn.disabled = true;
             submitBtn.classList.add('loading');
             
+            // Converter data para formato brasileiro para compatibilidade
+            const dateInput = document.getElementById('appointmentDate').value;
+            const [year, month, day] = dateInput.split('-');
+            const brazilianDate = `${day}/${month}/${year}`;
+            
             const appointment = {
                 id: Date.now(),
                 dentist: currentDentist,
-                patientName: document.getElementById('patientName').value,
-                patientPhone: document.getElementById('patientPhone').value,
-                patientEmail: document.getElementById('patientEmail').value,
-                date: document.getElementById('appointmentDate').value,
+                patientName: document.getElementById('patientName').value.trim(),
+                patientPhone: document.getElementById('patientPhone').value.trim(),
+                patientEmail: document.getElementById('patientEmail').value.trim(),
+                date: brazilianDate, // Formato brasileiro: DD/MM/YYYY
                 time: document.getElementById('appointmentTime').value,
                 type: document.getElementById('appointmentType').value,
-                observations: document.getElementById('observations').value,
+                observations: document.getElementById('observations').value.trim(),
                 timestamp: new Date().toISOString()
             };
 
             debugLog(`Criando agendamento para ${appointment.patientName}`);
+            debugLog(`Data convertida: ${dateInput} → ${brazilianDate}`);
 
-            // Check for conflicts (local)
+            // Validação local de conflitos
             const conflictExists = appointments.some(apt => 
                 apt.dentist === appointment.dentist && 
-                apt.date === appointment.date && 
+                apt.date === brazilianDate && 
                 apt.time === appointment.time
             );
 
             if (conflictExists) {
-                debugLog('Conflito de horário detectado');
-                showNotification('Este horário já está ocupado para este dentista. Por favor, escolha outro horário.', 'error');
+                debugLog('Conflito de horário detectado localmente');
+                showNotification('Este horário já está ocupado para este dentista. Escolha outro horário.', 'error');
                 resetSubmitButton();
                 return;
             }
 
             try {
-                // Attempt to send to Google Sheets
-                if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+                // Tentar enviar para Google Sheets
+                if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== 'COLE_SUA_URL_AQUI') {
                     debugLog('Enviando para Google Apps Script...');
                     
-                    // Send as URL-encoded form data
-                    const params = new URLSearchParams();
-                    params.append('action', 'addAppointment');
-                    params.append('dentist', appointment.dentist);
-                    params.append('patientName', appointment.patientName);
-                    params.append('patientPhone', appointment.patientPhone);
-                    params.append('patientEmail', appointment.patientEmail);
-                    params.append('date', appointment.date);
-                    params.append('time', appointment.time);
-                    params.append('type', appointment.type);
-                    params.append('observations', appointment.observations);
-                    params.append('timestamp', appointment.timestamp);
+                    // Preparar dados exatamente como o Apps Script espera
+                    const formData = new FormData();
+                    formData.append('action', 'addAppointment');
+                    formData.append('dentist', appointment.dentist);
+                    formData.append('patientName', appointment.patientName);
+                    formData.append('patientPhone', appointment.patientPhone);
+                    formData.append('patientEmail', appointment.patientEmail);
+                    formData.append('date', appointment.date);
+                    formData.append('time', appointment.time);
+                    formData.append('type', appointment.type);
+                    formData.append('observations', appointment.observations);
 
-                    debugLog('Dados a enviar: ' + JSON.stringify(appointment, null, 2));
+                    debugLog('Dados que serão enviados:');
+                    debugLog(`- Dentista: ${appointment.dentist}`);
+                    debugLog(`- Paciente: ${appointment.patientName}`);
+                    debugLog(`- Telefone: ${appointment.patientPhone}`);
+                    debugLog(`- Email: ${appointment.patientEmail}`);
+                    debugLog(`- Data: ${appointment.date}`);
+                    debugLog(`- Horário: ${appointment.time}`);
+                    debugLog(`- Tipo: ${appointment.type}`);
 
                     const response = await fetch(GOOGLE_SCRIPT_URL, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: params.toString(),
-                        mode: 'no-cors'  // Changed to no-cors for better compatibility
+                        body: formData
                     });
 
-                    debugLog('Dados enviados para Google Apps Script (no-cors mode)');
-                    showNotification('✅ Agendamento enviado para Google Sheets!', 'success');
+                    if (response.ok) {
+                        const result = await response.json();
+                        debugLog(`Resposta do servidor: ${JSON.stringify(result)}`);
+                        
+                        if (result.status === 'success') {
+                            debugLog(`✅ Agendamento salvo na planilha! ID: ${result.appointmentId}`);
+                            showNotification('Agendamento salvo com sucesso no Google Sheets!', 'success');
+                            updateConnectionStatus('connected');
+                        } else if (result.status === 'error') {
+                            debugLog(`❌ Erro do servidor: ${result.message}`);
+                            if (result.message.includes('Conflito de horário')) {
+                                showNotification('Este horário já está ocupado. Escolha outro horário.', 'error');
+                            } else {
+                                showNotification('Erro ao salvar: ' + result.message, 'error');
+                            }
+                            resetSubmitButton();
+                            return;
+                        }
+                    } else {
+                        debugLog(`Erro HTTP: ${response.status}`);
+                        throw new Error(`HTTP ${response.status}`);
+                    }
                     
                 } else {
                     debugLog('Google Apps Script URL não configurada - salvando apenas localmente');
                     // Simula delay para demonstração
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    showNotification('Agendamento salvo localmente! Configure Google Apps Script para sincronização.', 'success');
                 }
                 
-                // Salva localmente sempre (backup)
+                // Salvar localmente sempre (para backup e exibição imediata)
                 appointments.push(appointment);
                 updateAppointmentsList();
                 closeModal();
-                
-                if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
-                    showNotification('✅ Agendamento salvo localmente! Configure Google Apps Script para sincronização.', 'success');
-                }
                 
             } catch (error) {
                 debugLog(`Erro ao enviar: ${error.message}`);
                 
-                // Salva localmente como fallback
+                // Salvar localmente como fallback
                 appointments.push(appointment);
                 updateAppointmentsList();
                 closeModal();
                 
-                showNotification('⚠️ Agendamento salvo localmente. Erro na sincronização com Google Sheets.', 'error');
+                showNotification('Agendamento salvo localmente. Erro na sincronização com Google Sheets.', 'error');
+                updateConnectionStatus('disconnected');
             } finally {
                 resetSubmitButton();
             }
@@ -1183,7 +1285,7 @@
                 return;
             }
 
-            // Group appointments by dentist
+            // Agrupar agendamentos por dentista
             const groupedAppointments = appointments.reduce((groups, appointment) => {
                 const dentist = appointment.dentist;
                 if (!groups[dentist]) {
@@ -1199,16 +1301,19 @@
                 html += `<h4 style="color: #0d6efd; margin: 2rem 0 1.5rem 0; font-weight: 300; font-size: 1.3rem;">Dr(a). ${dentist}</h4>`;
                 
                 groupedAppointments[dentist]
-                    .sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time))
+                    .sort((a, b) => {
+                        const dateTimeA = convertToDate(a.date, a.time);
+                        const dateTimeB = convertToDate(b.date, b.time);
+                        return dateTimeA - dateTimeB;
+                    })
                     .forEach(appointment => {
-                        const date = new Date(appointment.date).toLocaleDateString('pt-BR');
                         html += `
                             <div class="appointment-item">
                                 <div>
                                     <strong style="font-weight: 400; color: #0d6efd;">${appointment.patientName}</strong><br>
-                                    📅 ${date} às ${appointment.time}<br>
+                                    📅 ${appointment.date} às ${appointment.time}<br>
                                     📱 ${appointment.patientPhone}<br>
-                                    📧 ${appointment.patientEmail}<br>
+                                    ${appointment.patientEmail ? `📧 ${appointment.patientEmail}<br>` : ''}
                                     🦷 ${appointment.type}
                                     ${appointment.observations ? `<br>📝 ${appointment.observations}` : ''}
                                 </div>
@@ -1224,6 +1329,13 @@
             debugLog(`Lista atualizada com ${appointments.length} agendamentos`);
         }
 
+        function convertToDate(dateStr, timeStr) {
+            // Converter data brasileira DD/MM/YYYY para Date object
+            const [day, month, year] = dateStr.split('/');
+            const [hours, minutes] = timeStr.split(':');
+            return new Date(year, month - 1, day, hours, minutes);
+        }
+
         function deleteAppointment(id) {
             if (confirm('Tem certeza que deseja excluir este agendamento?')) {
                 const appointmentToDelete = appointments.find(apt => apt.id === id);
@@ -1234,31 +1346,94 @@
             }
         }
 
-        // Load appointments from Google Sheets on page load
+        // Carregar agendamentos do Google Sheets
         async function loadAppointments() {
-            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL === 'COLE_SUA_URL_AQUI') {
                 debugLog('Google Apps Script não configurado - usando apenas armazenamento local');
+                updateConnectionStatus('disconnected');
                 return;
             }
 
             try {
                 debugLog('Carregando agendamentos do Google Sheets...');
-                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getAppointments', {
-                    method: 'GET',
-                    mode: 'no-cors'  // Changed to no-cors
+                updateConnectionStatus('testing');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getAppointments&timestamp=' + Date.now(), {
+                    method: 'GET'
                 });
 
-                debugLog('Solicitação de carregamento enviada (no-cors mode)');
+                if (response.ok) {
+                    const result = await response.json();
+                    debugLog(`Agendamentos carregados: ${JSON.stringify(result)}`);
+                    
+                    if (result.status === 'success' && result.data) {
+                        // Mesclar com agendamentos locais (evitar duplicatas)
+                        result.data.forEach(serverAppointment => {
+                            const exists = appointments.some(localApt => 
+                                localApt.patientName === serverAppointment.patientName &&
+                                localApt.date === serverAppointment.date &&
+                                localApt.time === serverAppointment.time
+                            );
+                            
+                            if (!exists) {
+                                appointments.push({
+                                    id: Date.now() + Math.random(),
+                                    ...serverAppointment
+                                });
+                            }
+                        });
+                        
+                        updateAppointmentsList();
+                        updateConnectionStatus('connected');
+                        debugLog(`${result.count} agendamentos sincronizados do servidor`);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 
             } catch (error) {
                 debugLog(`Erro ao carregar agendamentos: ${error.message}`);
+                updateConnectionStatus('disconnected');
             }
         }
 
-        // Initialize
-        updateAppointmentsList();
-        loadAppointments();
-        debugLog('Sistema inicializado');
+        // Função para formatar telefone automaticamente
+        document.getElementById('patientPhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            
+            if (value.length <= 11) {
+                if (value.length <= 10) {
+                    // Formato: (XX) XXXX-XXXX
+                    value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                } else {
+                    // Formato: (XX) 9XXXX-XXXX
+                    value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                }
+            }
+            
+            e.target.value = value;
+        });
+
+        // Validação de horário comercial
+        document.getElementById('appointmentTime').addEventListener('change', function(e) {
+            const time = e.target.value;
+            const [hours, minutes] = time.split(':').map(Number);
+            const totalMinutes = hours * 60 + minutes;
+            
+            // Horário comercial: 8:00 às 18:00
+            if (totalMinutes < 480 || totalMinutes > 1080) { // 8:00 = 480min, 18:00 = 1080min
+                showNotification('Horário deve estar entre 08:00 e 18:00', 'error');
+                e.target.value = '';
+            }
+        });
+
+        // Inicialização do sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAppointmentsList();
+            loadAppointments();
+            debugLog('Sistema inicializado');
+            debugLog('Aguardando configuração da URL do Google Apps Script...');
+        });
 
         // Escape key to close modal
         document.addEventListener('keydown', function(e) {
