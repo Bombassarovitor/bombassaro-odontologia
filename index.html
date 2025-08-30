@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clínica Dentária Bombassaro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #0a0a0a;
+            background: #ffffff;
+        }
+
+        .header {
+            height: 70vh;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f8f9fa" width="1200" height="600"/><path fill="%23e9ecef" d="M0,200 Q300,100 600,200 T1200,250 L1200,600 L0,600 Z"/><circle fill="%23ffffff" cx="200" cy="120" r="3" opacity="0.6"/><circle fill="%23ffffff" cx="800" cy="180" r="2" opacity="0.4"/><circle fill="%23ffffff" cx="1000" cy="150" r="4" opacity="0.3"/></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .header-content {
+            z-index: 2;
+            max-width: 1000px;
+            padding: 2rem;
+        }
+
+        .header h1 {
+            font-size: 4.5rem;
+            margin-bottom: 2rem;
+            font-weight: 100;
+            letter-spacing: -3px;
+            line-height: 1;
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            opacity: 0.85;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 8rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.2rem;
+            margin-bottom: 5rem;
+            color: #0a0a0a;
+            font-weight: 100;
+            letter-spacing: -2px;
+        }
+
+        .dentists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 4rem;
+            margin-bottom: 6rem;
+        }
+
+        .dentist-card {
+            background: #ffffff;
+            border-radius: 32px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            border: 1px solid #f0f0f0;
+            position: relative;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        .dentist-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            border-color: #e0e0e0;
+        }
+
+        .dentist-photo {
+            height: 320px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 1.1rem;
+            font-weight: 300;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dentist-photo::before {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(108, 117, 125, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dentist-photo::after {
+            content: '📷';
+            font-size: 2.5rem;
+            opacity: 0.3;
+            z-index: 1;
+        }
+
+        .dentist-info {
+            padding: 3rem;
+        }
+
+        .dentist-name {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: #0a0a0a;
+            letter-spacing: -0.5px;
+        }
+
+        .dentist-instagram {
+            color: #6c757d;
+            text-decoration: none;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            display: inline-block;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .dentist-instagram:hover {
+            color: #0a0a0a;
+        }
+
+        .dentist-description {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+            min-height: 120px;
+            color: #495057;
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.7;
+            border: 1px solid #f0f0f0;
+        }
+
+        .schedule-btn {
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 32px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 400;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            width: 100%;
+            margin-top: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .schedule-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .portfolio-section {
+            background: #f8f9fa;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .portfolio-item {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s ease;
+            border: 1px solid #f0f0f0;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+
+        .portfolio-placeholder {
+            height: 220px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 16px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 3rem;
+            border: 1px solid #f0f0f0;
+        }
+
+        .portfolio-item h4 {
+            font-size: 1.3rem;
+            font-weight: 300;
+            color: #0a0a0a;
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-item p {
+            color: #6c757d;
+            font-weight: 300;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 3% auto;
+            padding: 3rem;
+            border-radius: 32px;
+            width: 90%;
+            max-width: 550px;
+            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalSlideIn 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-60px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 32px;
+            font-weight: 100;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #0a0a0a;
+        }
+
+        .modal h2 {
+            font-size: 2rem;
+            font-weight: 200;
+            color: #0a0a0a;
+            margin-bottom: 2.5rem;
+            letter-spacing: -1px;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            color: #0a0a0a;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+            font-weight: 300;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #0a0a0a;
+            background: white;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .submit-btn {
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            border-radius: 32px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 400;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            letter-spacing: 0.5px;
+        }
+
+        .submit-btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .appointments {
+            background: white;
+            margin-top: 3rem;
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid #f0f0f0;
+        }
+
+        .appointments h3 {
+            font-size: 1.8rem;
+            font-weight: 200;
+            color: #0a0a0a;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+
+        .appointment-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .appointment-item:hover {
+            background: #f0f0f0;
+        }
+
+        .delete-btn {
+            background: #0a0a0a;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #333;
+            transform: translateY(-1px);
+        }
+
+        .footer {
+            background: #0a0a0a;
+            color: white;
+            padding: 4rem 0;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer h3 {
+            font-size: 1.5rem;
+            font-weight: 200;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .footer p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 3rem;
+                letter-spacing: -2px;
+            }
+            
+            .header p {
+                font-size: 1.2rem;
+            }
+            
+            .dentists-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 2rem;
+            }
+
+            .section {
+                padding: 5rem 0;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Clínica Dentária Bombassaro</h1>
+            <p>Cuidando do seu sorriso com excelência e dedicação</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Nossos Dentistas</h2>
+            <div class="dentists-grid">
+                <div class="dentist-card">
+                    <div class="dentist-photo">
+                        <span>Foto do Dr. Márcio</span>
+                    </div>
+                    <div class="dentist-info">
+                        <h3 class="dentist-name">Dr. Márcio Edu Bombassaro</h3>
+                        <a href="https://www.instagram.com/marcioedubombassaro/" class="dentist-instagram" target="_blank">@marcioedubombassaro</a>
+                        <div class="dentist-description">
+                            [Espaço para descrição do Dr. Márcio - adicione manualmente]
+                        </div>
+                        <button class="schedule-btn" onclick="openModal('Márcio Edu Bombassaro')">
+                            Agendar Consulta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dentist-card">
+                    <div class="dentist-photo">
+                        <span>Foto da Dra. Consuelo</span>
+                    </div>
+                    <div class="dentist-info">
+                        <h3 class="dentist-name">Dra. Consuelo Bombassaro</h3>
+                        <a href="https://www.instagram.com/bombassaroconsuelo/" class="dentist-instagram" target="_blank">@bombassaroconsuelo</a>
+                        <div class="dentist-description">
+                            [Espaço para descrição da Dra. Consuelo - adicione manualmente]
+                        </div>
+                        <button class="schedule-btn" onclick="openModal('Consuelo Bombassaro')">
+                            Agendar Consulta
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dentist-card">
+                    <div class="dentist-photo">
+                        <span>Foto do Dr. Fernando</span>
+                    </div>
+                    <div class="dentist-info">
+                        <h3 class="dentist-name">Dr. Fernando Bombassaro</h3>
+                        <a href="https://www.instagram.com/bombassaro_fernando/" class="dentist-instagram" target="_blank">@bombassaro_fernando</a>
+                        <div class="dentist-description">
+                            [Espaço para descrição do Dr. Fernando - adicione manualmente]
+                        </div>
+                        <button class="schedule-btn" onclick="openModal('Fernando Bombassaro')">
+                            Agendar Consulta
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="appointments">
+                <h3>Agendamentos Realizados</h3>
+                <div id="appointmentsList"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section portfolio-section">
+        <div class="container">
+            <h2 class="section-title">Nossos Trabalhos</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder">🦷</div>
+                    <h4>Dr. Márcio Edu Bombassaro</h4>
+                    <p>Trabalhos realizados</p>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder">✨</div>
+                    <h4>Dra. Consuelo Bombassaro</h4>
+                    <p>Trabalhos realizados</p>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-placeholder">😁</div>
+                    <h4>Dr. Fernando Bombassaro</h4>
+                    <p>Trabalhos realizados</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3>Localização</h3>
+                <p>R. Bento Gonçalves, 910 - Centro<br>Itaqui - RS, 97650-000</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Agendamento -->
+    <div id="scheduleModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Agendar Consulta</h2>
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label for="patientName">Nome do Paciente:</label>
+                    <input type="text" id="patientName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="patientPhone">Telefone:</label>
+                    <input type="tel" id="patientPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="patientEmail">Email:</label>
+                    <input type="email" id="patientEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentDate">Data:</label>
+                    <input type="date" id="appointmentDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentTime">Horário:</label>
+                    <input type="time" id="appointmentTime" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="appointmentType">Tipo de Consulta:</label>
+                    <select id="appointmentType" required>
+                        <option value="">Selecione...</option>
+                        <option value="consulta">Consulta</option>
+                        <option value="limpeza">Limpeza</option>
+                        <option value="canal">Tratamento de Canal</option>
+                        <option value="ortodontia">Ortodontia</option>
+                        <option value="implante">Implante</option>
+                        <option value="emergencia">Emergência</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="observations">Observações:</label>
+                    <textarea id="observations" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Confirmar Agendamento</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let appointments = [];
+        let currentDentist = '';
+
+        function openModal(dentistName) {
+            currentDentist = dentistName;
+            document.getElementById('modalTitle').textContent = `Agendar Consulta - Dr(a). ${dentistName}`;
+            document.getElementById('scheduleModal').style.display = 'block';
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('appointmentDate').min = today;
+        }
+
+        function closeModal() {
+            document.getElementById('scheduleModal').style.display = 'none';
+            document.getElementById('scheduleForm').reset();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('scheduleModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // COLE SUA URL DO GOOGLE APPS SCRIPT AQUI:
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygKQFZS5VNzzeR8hycciERsCYiPU6RZ4ibCib9yrSMbr_f9EvSwAnrue9ThSD91bYj/exec';
+
+        document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+            
+            const appointment = {
+                id: Date.now(),
+                dentist: currentDentist,
+                patientName: document.getElementById('patientName').value,
+                patientPhone: document.getElementById('patientPhone').value,
+                patientEmail: document.getElementById('patientEmail').value,
+                date: document.getElementById('appointmentDate').value,
+                time: document.getElementById('appointmentTime').value,
+                type: document.getElementById('appointmentType').value,
+                observations: document.getElementById('observations').value
+            };
+
+            // Check for conflicts (local)
+            const conflictExists = appointments.some(apt => 
+                apt.dentist === appointment.dentist && 
+                apt.date === appointment.date && 
+                apt.time === appointment.time
+            );
+
+            if (conflictExists) {
+                alert('Este horário já está ocupado para este dentista. Por favor, escolha outro horário.');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            try {
+                // Enviar para Google Sheets
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(appointment)
+                });
+
+                const result = await response.json();
+                
+                if (result.status === 'success') {
+                    // Adicionar à lista local também
+                    appointments.push(appointment);
+                    updateAppointmentsList();
+                    closeModal();
+                    alert('✅ Agendamento realizado com sucesso!\n\nVocê receberá uma confirmação em breve.');
+                } else {
+                    throw new Error('Erro ao salvar agendamento');
+                }
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('❌ Erro ao realizar agendamento.\nTente novamente ou entre em contato conosco.');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        function updateAppointmentsList() {
+            const list = document.getElementById('appointmentsList');
+            if (appointments.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #6c757d; font-weight: 300;">Nenhum agendamento realizado ainda.</p>';
+                return;
+            }
+
+            // Group appointments by dentist
+            const groupedAppointments = appointments.reduce((groups, appointment) => {
+                const dentist = appointment.dentist;
+                if (!groups[dentist]) {
+                    groups[dentist] = [];
+                }
+                groups[dentist].push(appointment);
+                return groups;
+            }, {});
+
+            let html = '';
+            
+            Object.keys(groupedAppointments).forEach(dentist => {
+                html += `<h4 style="color: #0a0a0a; margin: 2rem 0 1.5rem 0; font-weight: 300; font-size: 1.3rem;">Dr(a). ${dentist}</h4>`;
+                
+                groupedAppointments[dentist]
+                    .sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time))
+                    .forEach(appointment => {
+                        const date = new Date(appointment.date).toLocaleDateString('pt-BR');
+                        html += `
+                            <div class="appointment-item">
+                                <div>
+                                    <strong style="font-weight: 400;">${appointment.patientName}</strong><br>
+                                    📅 ${date} às ${appointment.time}<br>
+                                    📱 ${appointment.patientPhone}<br>
+                                    🦷 ${appointment.type}
+                                    ${appointment.observations ? `<br>📝 ${appointment.observations}` : ''}
+                                </div>
+                                <button class="delete-btn" onclick="deleteAppointment(${appointment.id})">
+                                    Excluir
+                                </button>
+                            </div>
+                        `;
+                    });
+            });
+            
+            list.innerHTML = html;
+        }
+
+        function deleteAppointment(id) {
+            if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+                appointments = appointments.filter(apt => apt.id !== id);
+                updateAppointmentsList();
+            }
+        }
+
+        // Initialize
+        updateAppointmentsList();
+    </script>
+</body>
+</html>
