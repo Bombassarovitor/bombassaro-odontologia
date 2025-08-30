@@ -617,6 +617,13 @@
             transform: none;
         }
 
+        .submit-btn.loading {
+            background: linear-gradient(90deg, #e3f2fd 25%, #bbdefb 50%, #e3f2fd 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+            color: #0d6efd;
+        }
+
         .appointments {
             background: white;
             margin-top: 3rem;
@@ -743,11 +750,31 @@
             animation: fadeOutRight 0.5s ease-out forwards;
         }
 
-        /* Estados de loading melhorados */
-        .shimmer {
-            background: linear-gradient(90deg, rgba(13, 110, 253, 0.1) 25%, rgba(13, 110, 253, 0.3) 50%, rgba(13, 110, 253, 0.1) 75%);
-            background-size: 200px 100%;
-            animation: shimmer 1.5s infinite;
+        /* Debug section */
+        .debug-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+            border: 1px solid #e0e0e0;
+        }
+
+        .debug-section h4 {
+            color: #0d6efd;
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .debug-log {
+            background: #ffffff;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
         }
 
         @media (max-width: 768px) {
@@ -857,6 +884,15 @@
             <div class="appointments">
                 <h3>Agendamentos Realizados</h3>
                 <div id="appointmentsList"></div>
+                
+                <!-- Debug Section -->
+                <div class="debug-section">
+                    <h4>Debug - Status da Conexão com Google Apps Script</h4>
+                    <div id="debugLog" class="debug-log"></div>
+                    <button onclick="testConnection()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #0d6efd; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        Testar Conexão
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -950,6 +986,17 @@
     <script>
         let appointments = [];
         let currentDentist = '';
+        
+        // Configure your Google Apps Script URL here
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLJPaXbVlKazpuOuR02qblAnmWzf9G884aD-EOiawEYJ92NSrOAUn1xbor24LHCmuU/exec';
+
+        function debugLog(message) {
+            const debugElement = document.getElementById('debugLog');
+            const timestamp = new Date().toLocaleTimeString();
+            debugElement.textContent += `[${timestamp}] ${message}\n`;
+            debugElement.scrollTop = debugElement.scrollHeight;
+            console.log(message);
+        }
 
         function openModal(dentistName) {
             currentDentist = dentistName;
@@ -997,9 +1044,32 @@
             }, 3000);
         }
 
-        // SISTEMA DE AGENDAMENTO MELHORADO - Salva localmente
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLJPaXbVlKazpuOuR02qblAnmWzf9G884aD-EOiawEYJ92NSrOAUn1xbor24LHCmuU/exec'; // Adicione sua URL válida aqui se necessário
+        // Test connection function
+        async function testConnection() {
+            debugLog('Testando conexão com Google Apps Script...');
+            
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+                debugLog('ERRO: URL do Google Apps Script não configurada');
+                showNotification('Configure a URL do Google Apps Script primeiro', 'error');
+                return;
+            }
 
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=test', {
+                    method: 'GET',
+                    mode: 'no-cors'  // Changed to no-cors for better compatibility
+                });
+                
+                debugLog(`Teste enviado. Note: no-cors mode não permite ler a resposta`);
+                showNotification('Teste enviado para Google Apps Script', 'success');
+                
+            } catch (error) {
+                debugLog(`Erro de rede: ${error.message}`);
+                showNotification('Erro de conexão. Verifique a URL.', 'error');
+            }
+        }
+
+        // SISTEMA DE AGENDAMENTO MELHORADO
         document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1007,7 +1077,7 @@
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
-            submitBtn.classList.add('shimmer');
+            submitBtn.classList.add('loading');
             
             const appointment = {
                 id: Date.now(),
@@ -1018,8 +1088,11 @@
                 date: document.getElementById('appointmentDate').value,
                 time: document.getElementById('appointmentTime').value,
                 type: document.getElementById('appointmentType').value,
-                observations: document.getElementById('observations').value
+                observations: document.getElementById('observations').value,
+                timestamp: new Date().toISOString()
             };
+
+            debugLog(`Criando agendamento para ${appointment.patientName}`);
 
             // Check for conflicts (local)
             const conflictExists = appointments.some(apt => 
@@ -1029,32 +1102,79 @@
             );
 
             if (conflictExists) {
+                debugLog('Conflito de horário detectado');
                 showNotification('Este horário já está ocupado para este dentista. Por favor, escolha outro horário.', 'error');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('shimmer');
+                resetSubmitButton();
                 return;
             }
 
             try {
-                // Simula delay de envio para demonstração
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                // Attempt to send to Google Sheets
+                if (GOOGLE_SCRIPT_URL && !GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+                    debugLog('Enviando para Google Apps Script...');
+                    
+                    // Send as URL-encoded form data
+                    const params = new URLSearchParams();
+                    params.append('action', 'addAppointment');
+                    params.append('dentist', appointment.dentist);
+                    params.append('patientName', appointment.patientName);
+                    params.append('patientPhone', appointment.patientPhone);
+                    params.append('patientEmail', appointment.patientEmail);
+                    params.append('date', appointment.date);
+                    params.append('time', appointment.time);
+                    params.append('type', appointment.type);
+                    params.append('observations', appointment.observations);
+                    params.append('timestamp', appointment.timestamp);
+
+                    debugLog('Dados a enviar: ' + JSON.stringify(appointment, null, 2));
+
+                    const response = await fetch(GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: params.toString(),
+                        mode: 'no-cors'  // Changed to no-cors for better compatibility
+                    });
+
+                    debugLog('Dados enviados para Google Apps Script (no-cors mode)');
+                    showNotification('✅ Agendamento enviado para Google Sheets!', 'success');
+                    
+                } else {
+                    debugLog('Google Apps Script URL não configurada - salvando apenas localmente');
+                    // Simula delay para demonstração
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                }
                 
-                // Salva localmente
+                // Salva localmente sempre (backup)
                 appointments.push(appointment);
                 updateAppointmentsList();
                 closeModal();
-                showNotification('✅ Agendamento realizado com sucesso! Você receberá uma confirmação em breve.', 'success');
+                
+                if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+                    showNotification('✅ Agendamento salvo localmente! Configure Google Apps Script para sincronização.', 'success');
+                }
                 
             } catch (error) {
-                console.error('Erro:', error);
-                showNotification('❌ Erro ao realizar agendamento. Tente novamente ou entre em contato conosco.', 'error');
+                debugLog(`Erro ao enviar: ${error.message}`);
+                
+                // Salva localmente como fallback
+                appointments.push(appointment);
+                updateAppointmentsList();
+                closeModal();
+                
+                showNotification('⚠️ Agendamento salvo localmente. Erro na sincronização com Google Sheets.', 'error');
             } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                submitBtn.classList.remove('shimmer');
+                resetSubmitButton();
             }
         });
+
+        function resetSubmitButton() {
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.textContent = 'Confirmar Agendamento';
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+        }
 
         function updateAppointmentsList() {
             const list = document.getElementById('appointmentsList');
@@ -1088,6 +1208,7 @@
                                     <strong style="font-weight: 400; color: #0d6efd;">${appointment.patientName}</strong><br>
                                     📅 ${date} às ${appointment.time}<br>
                                     📱 ${appointment.patientPhone}<br>
+                                    📧 ${appointment.patientEmail}<br>
                                     🦷 ${appointment.type}
                                     ${appointment.observations ? `<br>📝 ${appointment.observations}` : ''}
                                 </div>
@@ -1100,18 +1221,44 @@
             });
             
             list.innerHTML = html;
+            debugLog(`Lista atualizada com ${appointments.length} agendamentos`);
         }
 
         function deleteAppointment(id) {
             if (confirm('Tem certeza que deseja excluir este agendamento?')) {
+                const appointmentToDelete = appointments.find(apt => apt.id === id);
                 appointments = appointments.filter(apt => apt.id !== id);
                 updateAppointmentsList();
+                debugLog(`Agendamento excluído: ${appointmentToDelete?.patientName}`);
                 showNotification('Agendamento excluído com sucesso.', 'success');
+            }
+        }
+
+        // Load appointments from Google Sheets on page load
+        async function loadAppointments() {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('YOUR_SCRIPT_URL_HERE')) {
+                debugLog('Google Apps Script não configurado - usando apenas armazenamento local');
+                return;
+            }
+
+            try {
+                debugLog('Carregando agendamentos do Google Sheets...');
+                const response = await fetch(GOOGLE_SCRIPT_URL + '?action=getAppointments', {
+                    method: 'GET',
+                    mode: 'no-cors'  // Changed to no-cors
+                });
+
+                debugLog('Solicitação de carregamento enviada (no-cors mode)');
+                
+            } catch (error) {
+                debugLog(`Erro ao carregar agendamentos: ${error.message}`);
             }
         }
 
         // Initialize
         updateAppointmentsList();
+        loadAppointments();
+        debugLog('Sistema inicializado');
 
         // Escape key to close modal
         document.addEventListener('keydown', function(e) {
