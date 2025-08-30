@@ -16,12 +16,106 @@
             line-height: 1.6;
             color: #0a0a0a;
             background: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animações personalizadas */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+            }
+            50% {
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            }
         }
 
         .header {
             height: 70vh;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)),
-                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f8f9fa" width="1200" height="600"/><path fill="%23e9ecef" d="M0,200 Q300,100 600,200 T1200,250 L1200,600 L0,600 Z"/><circle fill="%23ffffff" cx="200" cy="120" r="3" opacity="0.6"/><circle fill="%23ffffff" cx="800" cy="180" r="2" opacity="0.4"/><circle fill="%23ffffff" cx="1000" cy="150" r="4" opacity="0.3"/></svg>');
+            background: linear-gradient(135deg, rgba(13, 110, 253, 0.8), rgba(32, 201, 151, 0.6)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23e3f2fd" width="1200" height="600"/><path fill="%23bbdefb" d="M0,200 Q300,100 600,200 T1200,250 L1200,600 L0,600 Z"/><circle fill="%23ffffff" cx="200" cy="120" r="3" opacity="0.8"/><circle fill="%23ffffff" cx="800" cy="180" r="2" opacity="0.6"/><circle fill="%23ffffff" cx="1000" cy="150" r="4" opacity="0.5"/></svg>');
             background-size: cover;
             background-position: center;
             display: flex;
@@ -31,12 +125,14 @@
             text-align: center;
             color: white;
             position: relative;
+            animation: fadeInUp 1.2s ease-out;
         }
 
         .header-content {
             z-index: 2;
             max-width: 1000px;
             padding: 2rem;
+            animation: slideInFromBottom 1s ease-out 0.3s both;
         }
 
         .header h1 {
@@ -45,6 +141,7 @@
             font-weight: 100;
             letter-spacing: -3px;
             line-height: 1;
+            animation: fadeInUp 1s ease-out 0.5s both;
         }
 
         .header p {
@@ -52,6 +149,7 @@
             opacity: 0.85;
             font-weight: 300;
             letter-spacing: 0.5px;
+            animation: fadeInUp 1s ease-out 0.7s both;
         }
 
         .container {
@@ -71,6 +169,7 @@
             color: #0a0a0a;
             font-weight: 100;
             letter-spacing: -2px;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .dentists-grid {
@@ -88,12 +187,29 @@
             border: 1px solid #f0f0f0;
             position: relative;
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .dentist-card:nth-child(1) {
+            animation-delay: 0.1s;
+            animation-fill-mode: both;
+        }
+
+        .dentist-card:nth-child(2) {
+            animation-delay: 0.3s;
+            animation-fill-mode: both;
+        }
+
+        .dentist-card:nth-child(3) {
+            animation-delay: 0.5s;
+            animation-fill-mode: both;
         }
 
         .dentist-card:hover {
-            transform: translateY(-12px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
             border-color: #e0e0e0;
+            animation: glow 2s ease-in-out infinite;
         }
 
         .dentist-photo {
@@ -107,6 +223,7 @@
             font-weight: 300;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
         }
 
         .dentist-photo::before {
@@ -119,6 +236,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            animation: float 3s ease-in-out infinite;
         }
 
         .dentist-photo::after {
@@ -126,10 +244,16 @@
             font-size: 2.5rem;
             opacity: 0.3;
             z-index: 1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .dentist-card:hover .dentist-photo {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         }
 
         .dentist-info {
             padding: 3rem;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
         }
 
         .dentist-name {
@@ -138,6 +262,11 @@
             margin-bottom: 1rem;
             color: #0a0a0a;
             letter-spacing: -0.5px;
+            transition: color 0.3s ease;
+        }
+
+        .dentist-card:hover .dentist-name {
+            color: #333;
         }
 
         .dentist-instagram {
@@ -146,12 +275,30 @@
             font-weight: 400;
             margin-bottom: 2rem;
             display: inline-block;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
             font-size: 0.95rem;
+            position: relative;
+        }
+
+        .dentist-instagram::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: #0d6efd;
+            transition: width 0.3s ease;
         }
 
         .dentist-instagram:hover {
-            color: #0a0a0a;
+            color: #0d6efd;
+            transform: translateX(5px);
+        }
+
+        .dentist-instagram:hover::before {
+            width: 100%;
+            background: #0d6efd;
         }
 
         .dentist-description {
@@ -165,10 +312,16 @@
             font-weight: 300;
             line-height: 1.7;
             border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .dentist-card:hover .dentist-description {
+            background: #f0f0f0;
+            transform: translateY(-2px);
         }
 
         .schedule-btn {
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #0d6efd 0%, #20c997 100%);
             color: white;
             border: none;
             padding: 16px 32px;
@@ -176,20 +329,43 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: 400;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
             width: 100%;
             margin-top: 1.5rem;
             letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.2);
+        }
+
+        .schedule-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
         .schedule-btn:hover {
-            background: #333;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #0b5ed7 0%, #1cbf9a 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(13, 110, 253, 0.3);
+        }
+
+        .schedule-btn:hover::before {
+            left: 100%;
+        }
+
+        .schedule-btn:active {
+            transform: translateY(-1px);
         }
 
         .portfolio-section {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .portfolio-grid {
@@ -205,13 +381,29 @@
             padding: 3rem;
             text-align: center;
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
-            transition: all 0.4s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
             border: 1px solid #f0f0f0;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .portfolio-item:nth-child(1) {
+            animation-delay: 0.1s;
+            animation-fill-mode: both;
+        }
+
+        .portfolio-item:nth-child(2) {
+            animation-delay: 0.3s;
+            animation-fill-mode: both;
+        }
+
+        .portfolio-item:nth-child(3) {
+            animation-delay: 0.5s;
+            animation-fill-mode: both;
         }
 
         .portfolio-item:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            transform: translateY(-12px) rotate(2deg);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
         }
 
         .portfolio-placeholder {
@@ -225,6 +417,13 @@
             color: #6c757d;
             font-size: 3rem;
             border: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .portfolio-item:hover .portfolio-placeholder {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
         }
 
         .portfolio-item h4 {
@@ -232,11 +431,21 @@
             font-weight: 300;
             color: #0a0a0a;
             margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .portfolio-item:hover h4 {
+            color: #333;
         }
 
         .portfolio-item p {
             color: #6c757d;
             font-weight: 300;
+            transition: color 0.3s ease;
+        }
+
+        .portfolio-item:hover p {
+            color: #495057;
         }
 
         .modal {
@@ -247,25 +456,43 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
+            background: rgba(13, 110, 253, 0.1);
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.3s ease-out;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
             background: white;
-            margin: 3% auto;
+            margin: 2rem auto;
             padding: 3rem;
             border-radius: 32px;
             width: 90%;
             max-width: 550px;
-            box-shadow: 0 40px 120px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 40px 120px rgba(13, 110, 253, 0.15);
             position: relative;
-            animation: modalSlideIn 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            animation: modalSlideIn 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            min-height: auto;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            border: 2px solid rgba(13, 110, 253, 0.1);
         }
 
         @keyframes modalSlideIn {
-            from { transform: translateY(-60px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from { 
+                transform: translateY(-60px) scale(0.9); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0) scale(1); 
+                opacity: 1; 
+            }
         }
 
         .close {
@@ -276,11 +503,12 @@
             font-size: 32px;
             font-weight: 100;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .close:hover {
-            color: #0a0a0a;
+            color: #0d6efd;
+            transform: rotate(90deg);
         }
 
         .modal h2 {
@@ -289,11 +517,21 @@
             color: #0a0a0a;
             margin-bottom: 2.5rem;
             letter-spacing: -1px;
+            animation: fadeInLeft 0.5s ease-out 0.2s both;
         }
 
         .form-group {
             margin-bottom: 2rem;
+            animation: fadeInUp 0.4s ease-out;
         }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; animation-fill-mode: both; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; animation-fill-mode: both; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; animation-fill-mode: both; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; animation-fill-mode: both; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; animation-fill-mode: both; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; animation-fill-mode: both; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; animation-fill-mode: both; }
 
         .form-group label {
             display: block;
@@ -301,6 +539,7 @@
             font-weight: 400;
             color: #0a0a0a;
             font-size: 0.95rem;
+            transition: color 0.3s ease;
         }
 
         .form-group input,
@@ -311,23 +550,24 @@
             border: 1px solid #e0e0e0;
             border-radius: 16px;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
             background: #fafafa;
             font-weight: 300;
+            position: relative;
         }
 
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #0a0a0a;
+            border-color: #0d6efd;
             background: white;
-            transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(13, 110, 253, 0.15);
         }
 
         .submit-btn {
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #0d6efd 0%, #20c997 100%);
             color: white;
             border: none;
             padding: 18px 36px;
@@ -336,14 +576,39 @@
             font-size: 1.1rem;
             font-weight: 400;
             width: 100%;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
             letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.4s ease-out 0.8s both;
+            box-shadow: 0 8px 25px rgba(13, 110, 253, 0.2);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
         }
 
         .submit-btn:hover {
-            background: #333;
-            transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #0b5ed7 0%, #1cbf9a 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(13, 110, 253, 0.3);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .appointments {
@@ -353,6 +618,7 @@
             border-radius: 24px;
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.04);
             border: 1px solid #f0f0f0;
+            animation: slideInFromBottom 0.8s ease-out;
         }
 
         .appointments h3 {
@@ -361,6 +627,7 @@
             color: #0a0a0a;
             margin-bottom: 2rem;
             letter-spacing: -0.5px;
+            animation: fadeInLeft 0.6s ease-out;
         }
 
         .appointment-item {
@@ -372,15 +639,18 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid #f0f0f0;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            animation: fadeInRight 0.5s ease-out;
         }
 
         .appointment-item:hover {
-            background: #f0f0f0;
+            background: #e9ecef;
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
         }
 
         .delete-btn {
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
             border: none;
             padding: 8px 20px;
@@ -388,23 +658,43 @@
             cursor: pointer;
             font-size: 0.85rem;
             font-weight: 400;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .delete-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
         .delete-btn:hover {
-            background: #333;
-            transform: translateY(-1px);
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .delete-btn:hover::before {
+            left: 100%;
         }
 
         .footer {
-            background: #0a0a0a;
+            background: linear-gradient(135deg, #0d6efd 0%, #20c997 100%);
             color: white;
             padding: 4rem 0;
             margin-top: 6rem;
+            animation: fadeInUp 0.8s ease-out;
         }
 
         .footer-content {
             text-align: center;
+            animation: slideInFromBottom 0.6s ease-out 0.3s both;
         }
 
         .footer h3 {
@@ -421,34 +711,145 @@
             line-height: 1.8;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 3rem;
-                letter-spacing: -2px;
+        /* Animação de entrada para elementos visíveis */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Efeito shimmer para loading */
+        .shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200px 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        /* Notificação de sucesso/erro */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            color: white;
+            font-weight: 400;
+            z-index: 1001;
+            animation: slideInFromRight 0.5s cubic-bezier(0.23, 1, 0.320, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
             }
-            
-            .header p {
-                font-size: 1.2rem;
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
-            
-            .dentists-grid {
-                grid-template-columns: 1fr;
-                gap: 2.5rem;
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        }
+
+        .notification.fade-out {
+            animation: fadeOutRight 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeOutRight {
+            to {
+                opacity: 0;
+                transform: translateX(100px);
             }
-            
-            .modal-content {
-                width: 95%;
-                margin: 10% auto;
-                padding: 2rem;
+        }
+
+        /* Efeito de typing para o texto do header */
+        .typing-text {
+            overflow: hidden;
+            border-right: 3px solid rgba(255, 255, 255, 0.75);
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: rgba(255, 255, 255, 0.75); }
+        }
+
+        /* Melhorias responsivas */
+            @media (max-width: 768px) {
+                .header h1 {
+                    font-size: 3rem;
+                    letter-spacing: -2px;
+                }
+                
+                .header p {
+                    font-size: 1.2rem;
+                }
+                
+                .dentists-grid {
+                    grid-template-columns: 1fr;
+                    gap: 2.5rem;
+                }
+                
+                .modal {
+                    padding: 10px 0;
+                }
+                
+                .modal-content {
+                    width: 95%;
+                    margin: 1rem auto;
+                    padding: 2rem;
+                    max-height: calc(100vh - 2rem);
+                }
+
+                .section {
+                    padding: 5rem 0;
+                }
+
+                .section-title {
+                    font-size: 2.5rem;
+                }
+
+                .dentist-card:hover {
+                    transform: translateY(-8px) scale(1.01);
+                }
+
+                .portfolio-item:hover {
+                    transform: translateY(-8px) rotate(1deg);
+                }
             }
 
-            .section {
-                padding: 5rem 0;
-            }
+        /* Estados de loading melhorados */
+        .loading {
+            position: relative;
+        }
 
-            .section-title {
-                font-size: 2.5rem;
-            }
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: shimmer 1.5s infinite;
         }
     </style>
 </head>
@@ -462,9 +863,9 @@
 
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Nossos Dentistas</h2>
+            <h2 class="section-title animate-on-scroll">Nossos Dentistas</h2>
             <div class="dentists-grid">
-                <div class="dentist-card">
+                <div class="dentist-card animate-on-scroll">
                     <div class="dentist-photo">
                         <span>Foto do Dr. Márcio</span>
                     </div>
@@ -480,7 +881,7 @@
                     </div>
                 </div>
 
-                <div class="dentist-card">
+                <div class="dentist-card animate-on-scroll">
                     <div class="dentist-photo">
                         <span>Foto da Dra. Consuelo</span>
                     </div>
@@ -496,266 +897,8 @@
                     </div>
                 </div>
 
-                <div class="dentist-card">
+                <div class="dentist-card animate-on-scroll">
                     <div class="dentist-photo">
                         <span>Foto do Dr. Fernando</span>
                     </div>
-                    <div class="dentist-info">
-                        <h3 class="dentist-name">Dr. Fernando Bombassaro</h3>
-                        <a href="https://www.instagram.com/bombassaro_fernando/" class="dentist-instagram" target="_blank">@bombassaro_fernando</a>
-                        <div class="dentist-description">
-                            [Espaço para descrição do Dr. Fernando - adicione manualmente]
-                        </div>
-                        <button class="schedule-btn" onclick="openModal('Fernando Bombassaro')">
-                            Agendar Consulta
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="appointments">
-                <h3>Agendamentos Realizados</h3>
-                <div id="appointmentsList"></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section portfolio-section">
-        <div class="container">
-            <h2 class="section-title">Nossos Trabalhos</h2>
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-placeholder">🦷</div>
-                    <h4>Dr. Márcio Edu Bombassaro</h4>
-                    <p>Trabalhos realizados</p>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-placeholder">✨</div>
-                    <h4>Dra. Consuelo Bombassaro</h4>
-                    <p>Trabalhos realizados</p>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-placeholder">😁</div>
-                    <h4>Dr. Fernando Bombassaro</h4>
-                    <p>Trabalhos realizados</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <h3>Localização</h3>
-                <p>R. Bento Gonçalves, 910 - Centro<br>Itaqui - RS, 97650-000</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Modal de Agendamento -->
-    <div id="scheduleModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Agendar Consulta</h2>
-            <form id="scheduleForm">
-                <div class="form-group">
-                    <label for="patientName">Nome do Paciente:</label>
-                    <input type="text" id="patientName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="patientPhone">Telefone:</label>
-                    <input type="tel" id="patientPhone" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="patientEmail">Email:</label>
-                    <input type="email" id="patientEmail" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="appointmentDate">Data:</label>
-                    <input type="date" id="appointmentDate" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="appointmentTime">Horário:</label>
-                    <input type="time" id="appointmentTime" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="appointmentType">Tipo de Consulta:</label>
-                    <select id="appointmentType" required>
-                        <option value="">Selecione...</option>
-                        <option value="consulta">Consulta</option>
-                        <option value="limpeza">Limpeza</option>
-                        <option value="canal">Tratamento de Canal</option>
-                        <option value="ortodontia">Ortodontia</option>
-                        <option value="implante">Implante</option>
-                        <option value="emergencia">Emergência</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="observations">Observações:</label>
-                    <textarea id="observations" rows="3"></textarea>
-                </div>
-                
-                <button type="submit" class="submit-btn">Confirmar Agendamento</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        let appointments = [];
-        let currentDentist = '';
-
-        function openModal(dentistName) {
-            currentDentist = dentistName;
-            document.getElementById('modalTitle').textContent = `Agendar Consulta - Dr(a). ${dentistName}`;
-            document.getElementById('scheduleModal').style.display = 'block';
-            
-            // Set minimum date to today
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('appointmentDate').min = today;
-        }
-
-        function closeModal() {
-            document.getElementById('scheduleModal').style.display = 'none';
-            document.getElementById('scheduleForm').reset();
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('scheduleModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
-
-        // COLE SUA URL DO GOOGLE APPS SCRIPT AQUI:
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygKQFZS5VNzzeR8hycciERsCYiPU6RZ4ibCib9yrSMbr_f9EvSwAnrue9ThSD91bYj/exec';
-
-        document.getElementById('scheduleForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.querySelector('.submit-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Enviando...';
-            submitBtn.disabled = true;
-            
-            const appointment = {
-                id: Date.now(),
-                dentist: currentDentist,
-                patientName: document.getElementById('patientName').value,
-                patientPhone: document.getElementById('patientPhone').value,
-                patientEmail: document.getElementById('patientEmail').value,
-                date: document.getElementById('appointmentDate').value,
-                time: document.getElementById('appointmentTime').value,
-                type: document.getElementById('appointmentType').value,
-                observations: document.getElementById('observations').value
-            };
-
-            // Check for conflicts (local)
-            const conflictExists = appointments.some(apt => 
-                apt.dentist === appointment.dentist && 
-                apt.date === appointment.date && 
-                apt.time === appointment.time
-            );
-
-            if (conflictExists) {
-                alert('Este horário já está ocupado para este dentista. Por favor, escolha outro horário.');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-                return;
-            }
-
-            try {
-                // Enviar para Google Sheets
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(appointment)
-                });
-
-                const result = await response.json();
-                
-                if (result.status === 'success') {
-                    // Adicionar à lista local também
-                    appointments.push(appointment);
-                    updateAppointmentsList();
-                    closeModal();
-                    alert('✅ Agendamento realizado com sucesso!\n\nVocê receberá uma confirmação em breve.');
-                } else {
-                    throw new Error('Erro ao salvar agendamento');
-                }
-                
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('❌ Erro ao realizar agendamento.\nTente novamente ou entre em contato conosco.');
-            } finally {
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-
-        function updateAppointmentsList() {
-            const list = document.getElementById('appointmentsList');
-            if (appointments.length === 0) {
-                list.innerHTML = '<p style="text-align: center; color: #6c757d; font-weight: 300;">Nenhum agendamento realizado ainda.</p>';
-                return;
-            }
-
-            // Group appointments by dentist
-            const groupedAppointments = appointments.reduce((groups, appointment) => {
-                const dentist = appointment.dentist;
-                if (!groups[dentist]) {
-                    groups[dentist] = [];
-                }
-                groups[dentist].push(appointment);
-                return groups;
-            }, {});
-
-            let html = '';
-            
-            Object.keys(groupedAppointments).forEach(dentist => {
-                html += `<h4 style="color: #0a0a0a; margin: 2rem 0 1.5rem 0; font-weight: 300; font-size: 1.3rem;">Dr(a). ${dentist}</h4>`;
-                
-                groupedAppointments[dentist]
-                    .sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time))
-                    .forEach(appointment => {
-                        const date = new Date(appointment.date).toLocaleDateString('pt-BR');
-                        html += `
-                            <div class="appointment-item">
-                                <div>
-                                    <strong style="font-weight: 400;">${appointment.patientName}</strong><br>
-                                    📅 ${date} às ${appointment.time}<br>
-                                    📱 ${appointment.patientPhone}<br>
-                                    🦷 ${appointment.type}
-                                    ${appointment.observations ? `<br>📝 ${appointment.observations}` : ''}
-                                </div>
-                                <button class="delete-btn" onclick="deleteAppointment(${appointment.id})">
-                                    Excluir
-                                </button>
-                            </div>
-                        `;
-                    });
-            });
-            
-            list.innerHTML = html;
-        }
-
-        function deleteAppointment(id) {
-            if (confirm('Tem certeza que deseja excluir este agendamento?')) {
-                appointments = appointments.filter(apt => apt.id !== id);
-                updateAppointmentsList();
-            }
-        }
-
-        // Initialize
-        updateAppointmentsList();
-    </script>
-</body>
-</html>
+                    <div class="dentist-
